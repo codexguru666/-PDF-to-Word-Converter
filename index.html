@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<title>✨ PDF to Word Converter 📄➡️📝</title>
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f9f9ff, #d1e9fa);
+    color: #333;
+  }
+  a {
+    color: #0078d4;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    background: #286ce5;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  header .logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    user-select: none;
+    display: flex;
+    align-items: center;
+  }
+  header .logo span {
+    margin-left: 0.5rem;
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+  }
+  nav ul li {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  main {
+    max-width: 900px;
+    margin: 2rem auto 4rem;
+    padding: 0 1rem;
+  }
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #203a94;
+    margin-bottom: 0.3rem;
+  }
+  h2.section-title {
+    color: #203a94;
+    border-bottom: 3px solid #286ce5;
+    padding-bottom: 0.2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+  section.tool {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(40,108,229,0.15);
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  label {
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+    display: block;
+    font-weight: 600;
+  }
+  input[type=file] {
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    cursor: pointer;
+  }
+  button.convert-btn, button.download-btn {
+    background: #286ce5;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    margin: 0.5rem 0.75rem;
+    transition: background-color 0.3s ease;
+  }
+  button.convert-btn:hover, button.download-btn:hover {
+    background: #1c4dbd;
+  }
+  button.download-btn:disabled {
+    background: #999;
+    cursor: not-allowed;
+  }
+  section.testimonials, section.faqs {
+    max-width: 860px;
+    margin: 0 auto 3rem;
+  }
+  .cards-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .card {
+    background: white;
+    padding: 1.2rem 1.5rem;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(40,108,229,0.1);
+    flex: 1 1 260px;
+    min-width: 260px;
+    color: #333;
+  }
+  .testimonial .card {
+    border-left: 5px solid #286ce5;
+  }
+  .testimonial .emoji {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .testimonial .name {
+    font-weight: 700;
+    margin-top: 0.8rem;
+    color: #286ce5;
+  }
+  .faq .card {
+    cursor: pointer;
+    position: relative;
+  }
+  .faq .question {
+    font-weight: 600;
+    font-size: 1.1rem;
+    user-select: none;
+  }
+  .faq .answer {
+    margin-top: 0.6rem;
+    font-size: 1rem;
+    line-height: 1.4;
+    display: none;
+    color: #444;
+  }
+  .faq .card.open .answer {
+    display: block;
+  }
+  .faq .card.open .question::after {
+    content: "▲";
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: #286ce5;
+  }
+  .faq .card .question::after {
+    content: "▼";
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: #286ce5;
+  }
+  footer {
+    background: #203a94;
+    color: white;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  .adsense {
+    margin: 1rem auto;
+    text-align: center;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 728px;
+    box-shadow: 0 6px 18px rgba(40,108,229,0.15);
+  }
+  /* Responsive */
+  @media (max-width: 700px) {
+    nav ul {
+      gap: 1rem;
+    }
+    .cards-container {
+      flex-direction: column;
+    }
+    .card {
+      max-width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" aria-label="Logo">📄<span>PDF2Word</span></div>
+  <nav>
+    <ul>
+      <li><a href="#home" aria-label="Home">🏠 Home</a></li>
+      <li><a href="#tool" aria-label="Convert">🔄 Convert</a></li>
+      <li><a href="#privacy" aria-label="Privacy Policy">🛡️ Privacy</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div id="top-ads" class="adsense" aria-label="Advertisement top">
+  <script type="text/javascript">
+	atOptions = {
+		'key' : '9e444108ce409887f1051df7ffb512e8',
+		'format' : 'iframe',
+		'height' : 90,
+		'width' : 728,
+		'params' : {}
+	};
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/9e444108ce409887f1051df7ffb512e8/invoke.js"></script>
+</div>
+
+<main>
+  <section id="home" aria-label="Welcome Section">
+    <h1>✨ PDF to Word Converter 📄➡️📝</h1>
+    <p style="text-align:center; font-size:1.1rem; color:#444; margin-top:-0.5rem;">
+      Convert your PDF files to editable Word documents easily and fast! 🚀
+    </p>
+  </section>
+
+  <section id="tool" class="tool" aria-label="Conversion Tool">
+    <h2 class="section-title">Convert Your PDF 📥</h2>
+    <label for="pdf-file">Select PDF file to convert:</label>
+    <input type="file" id="pdf-file" accept="application/pdf" aria-required="true" />
+    <br />
+    <button id="convert-btn" class="convert-btn" aria-label="Convert PDF to Word">🔄 Convert</button>
+    <button id="download-btn" class="download-btn" disabled aria-label="Download Word Document">⬇️ Download Word</button>
+    <p id="status-msg" aria-live="polite" style="margin-top: 1rem; color: #286ce5; font-weight: 600;"></p>
+  </section>
+
+  <div id="middle-ads" class="adsense" aria-label="Advertisement middle">
+    <script type="text/javascript">
+    atOptions = {
+        'key' : '9e444108ce409887f1051df7ffb512e8',
+        'format' : 'iframe',
+        'height' : 90,
+        'width' : 728,
+        'params' : {}
+    };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/9e444108ce409887f1051df7ffb512e8/invoke.js"></script>
+  </div>
+
+  <section id="testimonials" class="testimonials" aria-label="User Testimonials">
+    <h2 class="section-title">What Our Users Say 💬</h2>
+    <div class="cards-container">
+      <div class="card">
+        <div class="emoji">😊</div>
+        <p>"I was amazed by how fast and accurate this PDF to Word converter is! Saved me hours of work." </p>
+        <div class="name">- Emily R.</div>
+      </div>
+      <div class="card">
+        <div class="emoji">👍</div>
+        <p>"Simple, intuitive interface and great results every time. Highly recommended!"</p>
+        <div class="name">- Jack M.</div>
+      </div>
+      <div class="card">
+        <div class="emoji">🎉</div>
+        <p>"Awesome tool! It even kept the formatting better than others I've tried." </p>
+        <div class="name">- Priya S.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faqs" class="faq" aria-label="Frequently Asked Questions">
+    <h2 class="section-title">FAQs ❓</h2>
+    <div class="cards-container">
+      <div class="card" tabindex="0">
+        <div class="question">What types of PDFs can be converted?</div>
+        <div class="answer">Our tool can convert text-based PDFs. Scanned images might not convert correctly.</div>
+      </div>
+      <div class="card" tabindex="0">
+        <div class="question">Is my data safe?</div>
+        <div class="answer">Yes, all processing happens locally in your browser. No files are uploaded anywhere.</div>
+      </div>
+      <div class="card" tabindex="0">
+        <div class="question">Are there any file size limits?</div>
+        <div class="answer">Files up to 10 MB are supported to ensure fast processing in your browser.</div>
+      </div>
+      <div class="card" tabindex="0">
+        <div class="question">What formats can I download?</div>
+        <div class="answer">You can download the output as a .doc file readable by Microsoft Word.</div>
+      </div>
+      <div class="card" tabindex="0">
+        <div class="question">Can I convert multiple pages?</div>
+        <div class="answer">Yes, multi-page PDFs are fully supported, and text from all pages is extracted.</div>
+      </div>
+    </div>
+  </section>
+
+  <div id="bottom-ads" class="adsense" aria-label="Advertisement bottom">
+    <script type="text/javascript">
+    atOptions = {
+        'key' : '9e444108ce409887f1051df7ffb512e8',
+        'format' : 'iframe',
+        'height' : 90,
+        'width' : 728,
+        'params' : {}
+    };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/9e444108ce409887f1051df7ffb512e8/invoke.js"></script>
+  </div>
+
+</main>
+
+<div id="last-ads" class="adsense" aria-label="Advertisement last">
+  <script type="text/javascript">
+  atOptions = {
+      'key' : '9e444108ce409887f1051df7ffb512e8',
+      'format' : 'iframe',
+      'height' : 90,
+      'width' : 728,
+      'params' : {}
+  };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/9e444108ce409887f1051df7ffb512e8/invoke.js"></script>
+</div>
+
+<footer>
+  <p>© 2024 PDF2Word Converter | Made with ❤️ and ☕ by Your Friendly Dev</p>
+</footer>
+
+<!-- PDF.js library to extract text from PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
+<script>
+  const pdfFileInput = document.getElementById('pdf-file');
+  const convertBtn = document.getElementById('convert-btn');
+  const downloadBtn = document.getElementById('download-btn');
+  const statusMsg = document.getElementById('status-msg');
+
+  let extractedText = "";
+
+  // Utility function to convert text to a Word .doc Blob (simple approach)
+  function generateWordDoc(text) {
+    // Simple Word-compatible document with basic structure
+    const header = "\uFEFF"; // BOM for UTF-8 compatibility
+    const htmlContent = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+        xmlns:w='urn:schemas-microsoft-com:office:word' 
+        xmlns='http://www.w3.org/TR/REC-html40'>
+      <head><meta charset='utf-8'><title>Converted Document</title></head>
+      <body>${text.replace(/\n/g, '<br>')}</body></html>`;
+    const blob = new Blob([header + htmlContent], {type: 'application/msword'});
+    return blob;
+  }
+
+  // Extract text from PDF using pdf.js
+  async function extractTextFromPDF(file) {
+    statusMsg.textContent = "⏳ Extracting text from PDF...";
+    const typedarray = new Uint8Array(await file.arrayBuffer());
+    const loadingTask = pdfjsLib.getDocument(typedarray);
+    try {
+      const pdf = await loadingTask.promise;
+      let fullText = "";
+      for(let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        const strings = content.items.map(item => item.str);
+        fullText += strings.join(' ') + '\n\n';
+      }
+      return fullText.trim();
+    } catch (e) {
+      console.error(e);
+      throw new Error("Failed to extract text from PDF.");
+    }
+  }
+
+  convertBtn.addEventListener('click', async () => {
+    const file = pdfFileInput.files[0];
+    if (!file) {
+      alert("Please select a PDF file first! 📂");
+      return;
+    }
+    if(file.type !== "application/pdf") {
+      alert("Only PDF files are supported! 📄");
+      return;
+    }
+    convertBtn.disabled = true;
+    downloadBtn.disabled = true;
+    statusMsg.textContent = "";
+    try {
+      extractedText = await extractTextFromPDF(file);
+      statusMsg.textContent = "✅ Extraction complete! Click download to get your Word file.";
+      downloadBtn.disabled = false;
+    } catch (error) {
+      statusMsg.textContent = "❌ Error during conversion: " + error.message;
+    }
+    convertBtn.disabled = false;
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    if (!extractedText) {
+      alert("No text extracted yet! Please convert a file first.");
+      return;
+    }
+    const wordBlob = generateWordDoc(extractedText);
+    const url = URL.createObjectURL(wordBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "converted-document.doc";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // FAQ toggle
+  document.querySelectorAll('.faq .card').forEach(card => {
+    card.querySelector('.question').addEventListener('click', () => {
+      card.classList.toggle('open');
+    });
+    // Also toggle on Enter key for accessibility
+    card.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.classList.toggle('open');
+      }
+    });
+  });
+</script>
+</body>
+</html>
+
